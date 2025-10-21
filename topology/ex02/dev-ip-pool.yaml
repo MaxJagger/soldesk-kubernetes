@@ -1,0 +1,12 @@
+---
+apiVersion: metallb.io/v1beta1
+kind: IPAddressPool
+metadata:
+  name: dev-pool
+  namespace: metallb-system
+spec:
+  addresses:
+    - 192.168.100.100-192.168.100.110
+  serviceAllocation:
+    namespaces:
+      - development
