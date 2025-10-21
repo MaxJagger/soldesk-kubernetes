@@ -1,1 +1,1 @@
-kubectl delete -f soldesk-kubernetes/topology/ex04/
+kubectl delete -f /root/soldesk-kubernetes/topology/ex04/
