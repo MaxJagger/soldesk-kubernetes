@@ -1,0 +1,36 @@
+kind: CronJob
+metadata:
+  name: cronjob-nginx
+  namespace: myns
+spec:
+  successfulJobsHistoryLimit: 1
+  schedule: "*/1 * * * *"
+  failedJobsHistoryLimit: 1
+  concurrencyPolicy: Forbid
+  jobTemplate:
+    spec:
+      template:
+       spec:
+         containers:
+         - name: created-by-cronjob
+           image: nginx
+           command:
+           - sh
+           - -c
+           - |
+             cp /pvmount/* /backup
+             sleep infinity
+           volumeMounts:
+           - mountPath: /pvmount
+             name: longhorn-vol
+           - mountPath: /backup
+             name: longhorn-vol-backup
+         volumes:
+         - name: longhorn-vol
+           persistentVolumeClaim:
+             claimName: longhorn-pvc-b
+         - name: longhorn-vol-backup
+           persistentVolumeClaim:
+             claimName: longhorn-pvc-a
+
+         restartPolicy: OnFailure
