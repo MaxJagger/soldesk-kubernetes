@@ -1,0 +1,25 @@
+apiVersion: apps/v1
+kind: ReplicaSet
+metadata:
+  name: dept1-replica-controller
+  namespace: myns
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: dept1-nginx-pods
+  template:
+    metadata:
+      labels:
+        app: dept1-nginx-pods
+    spec:
+      containers:
+      - name: dept1-nginx
+        image: nginx
+        volumeMounts:
+        - mountPath: /pvmount/
+          name: longhorn-vol
+      volumes:
+      - name: longhorn-vol
+        persistentVolumeClaim:
+          claimName: longhorn-pvc
