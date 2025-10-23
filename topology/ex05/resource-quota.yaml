@@ -1,0 +1,9 @@
+---
+apiVersion: v1
+kind: ResourceQuota
+metadata:
+  name: dept1-compute-quota
+  namespace: myns
+spec:
+  hard:
+    pods: "10"
