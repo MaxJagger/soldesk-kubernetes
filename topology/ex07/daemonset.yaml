@@ -1,0 +1,34 @@
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: nginx-daemon
+  namespace: myns
+spec:
+  selector:
+    matchLabels:
+      app: nginx-daemon
+  template:
+    metadata:
+      labels:
+        app: nginx-daemon
+    spec:
+      containers:
+      - name: backup-pod
+        image: nginx
+        command:
+        - sh
+        - -c
+        - cp -a /hostlogs/. /backup-pvc/
+        volumeMounts:
+        - name: host-logs
+          mountPath: /hostlogs
+        - name: backup-mount
+          mountPath: /backup-pvc/
+      volumes:
+      - name: host-logs
+        hostPath:
+          path: /var/log/containers
+          type: Directory
+      - name: backup-mount
+        persistentVolumeClaim:
+          claimName: longhorn-pvc
